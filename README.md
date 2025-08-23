@@ -39,11 +39,30 @@ Sales-Forecasting-Retail/
 │── requirements.txt              # Dependencies
 │── README.md                     # Project documentation
 ```
+## 📝 File Descriptions  
 
+- data/sales.csv → Raw dataset containing historical retail sales.  
+
+- notebooks/sales_forecasting.ipynb →  
+  • Exploratory Data Analysis (EDA) on sales data.  
+  • Feature engineering (lag values, rolling averages, etc.).  
+  • Model training with ARIMA, LSTM, XGBoost, etc.  
+  • Evaluation with metrics (RMSE, MAE, MAPE).  
+  • Saves results to the outputs/ folder.  
+
+- outputs/ → Contains saved metrics and visualizations for model comparison & analysis.  
+
+- dashboard/app.py →  
+  • Streamlit dashboard for interactive forecasting.  
+  • Tabs for Data View, Forecasting, and Risk Analysis.  
+  • Visualizes model predictions and understock risks.  
+  • Allows downloading forecast results as CSV.  
+
+- requirements.txt → List of dependencies to set up the project environment.  
 ---
 
 ## 📊 Model Comparison  
-- Models are evaluated using **RMSE, MAE, R²**  
+- Models are evaluated using **RMSE, MAE,**  
 - Best performing models are highlighted in the dashboard  
 
 ---
