@@ -27,16 +27,22 @@ XGB_PATH = PROJECT_ROOT / "outputs" / "models" / "xgb_model.pkl"
 LSTM_PATH = PROJECT_ROOT / "outputs" / "models" / "lstm_model.h5"
 
 # ----------------------------
-# Load dataset
+# Load dataset & models (Cached for fast performance)
 # ----------------------------
-df = pd.read_csv(DATA_PATH)
-df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
+@st.cache_data
+def load_data():
+    data = pd.read_csv(DATA_PATH)
+    data['Date'] = pd.to_datetime(data['Date'], dayfirst=True)
+    return data
 
-# ----------------------------
-# Load trained models
-# ----------------------------
-xgb_model = joblib.load(XGB_PATH)
-lstm_model = load_model(LSTM_PATH, compile=False)
+@st.cache_resource
+def load_models():
+    xgb = joblib.load(XGB_PATH)
+    lstm = load_model(LSTM_PATH, compile=False)
+    return xgb, lstm
+
+df = load_data()
+xgb_model, lstm_model = load_models()
 
 # ----------------------------
 # Sidebar

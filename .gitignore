@@ -10,8 +10,7 @@ __pycache__/
 # Ignore Jupyter notebook checkpoints
 .ipynb_checkpoints/
 
-# Ignore model files and large data
-outputs/models/
+# Ignore figures
 outputs/figures/
 
 # Ignore system files
