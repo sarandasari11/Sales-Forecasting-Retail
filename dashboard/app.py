@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from tensorflow.keras.models import load_model
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -37,8 +36,19 @@ def load_data():
 
 @st.cache_resource
 def load_models():
-    xgb = joblib.load(XGB_PATH)
-    lstm = load_model(LSTM_PATH, compile=False)
+    xgb = None
+    lstm = None
+    if XGB_PATH.exists():
+        try:
+            xgb = joblib.load(XGB_PATH)
+        except Exception as e:
+            st.warning(f"Could not load XGBoost model: {e}")
+    if LSTM_PATH.exists():
+        try:
+            from tensorflow.keras.models import load_model
+            lstm = load_model(LSTM_PATH, compile=False)
+        except Exception as e:
+            st.warning(f"Could not load LSTM model: {e}")
     return xgb, lstm
 
 df = load_data()
@@ -100,19 +110,20 @@ y_xgb_pred, y_lstm_pred, y_arima_pred = None, None, None
 xgb_dates, lstm_dates, arima_dates = None, None, None
 
 # XGBoost
-if 'XGBoost' in model_options:
+if 'XGBoost' in model_options and xgb_model is not None:
     y_xgb_pred = xgb_model.predict(store_data[features].astype(float))
     xgb_dates = store_data['Date']
 
 # LSTM
-if 'LSTM' in model_options:
+if 'LSTM' in model_options and lstm_model is not None:
     scaler = MinMaxScaler()
     sales_scaled = scaler.fit_transform(store_data[['Weekly_Sales']].values)
     time_steps = 10
-    X_lstm = np.array([sales_scaled[i:(i+time_steps),0] for i in range(len(sales_scaled)-time_steps)])
-    X_lstm = X_lstm.reshape((X_lstm.shape[0], X_lstm.shape[1],1))
-    y_lstm_pred = scaler.inverse_transform(lstm_model.predict(X_lstm))
-    lstm_dates = store_data['Date'].iloc[time_steps:]
+    if len(sales_scaled) > time_steps:
+        X_lstm = np.array([sales_scaled[i:(i+time_steps),0] for i in range(len(sales_scaled)-time_steps)])
+        X_lstm = X_lstm.reshape((X_lstm.shape[0], X_lstm.shape[1],1))
+        y_lstm_pred = scaler.inverse_transform(lstm_model.predict(X_lstm))
+        lstm_dates = store_data['Date'].iloc[time_steps:]
 
 # ARIMA
 if 'ARIMA' in model_options:

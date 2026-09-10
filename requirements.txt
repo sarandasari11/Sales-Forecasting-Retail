@@ -1,9 +1,12 @@
 streamlit
 pandas
 numpy
+matplotlib
 plotly
 scikit-learn
 xgboost
+lightgbm
 statsmodels
+holidays
 tensorflow-cpu
 joblib
