@@ -27,21 +27,24 @@ It includes an **interactive Streamlit dashboard** where users can explore forec
 ✅ Clear metrics & comparison visualizations  
 
 ---
-```
+
 ## 📂 Project Structure
 Sales-Forecasting-Retail/
 │── data/                         # Dataset (sales.csv)
 │── notebooks/                    # Jupyter notebooks
-│ └── sales_forecasting.ipynb
+│   └── sales_forecasting.ipynb
 │── outputs/                      # Model metrics & plots
 │── dashboard/                    # Streamlit dashboard app
-│ └── app.py
+│   └── app.py
+│── train_models.py               # Model training script (XGBoost, LSTM)
 │── requirements.txt              # Dependencies
 │── README.md                     # Project documentation
-```
+
 ## 📝 File Descriptions  
 
 - data/sales.csv → Raw dataset containing historical retail sales.  
+
+- train_models.py → Python script to train XGBoost and LSTM models and save them to `outputs/models/`.
 
 - notebooks/sales_forecasting.ipynb →  
   • Exploratory Data Analysis (EDA) on sales data.  
@@ -50,7 +53,7 @@ Sales-Forecasting-Retail/
   • Evaluation with metrics (RMSE, MAE, MAPE).  
   • Saves results to the outputs/ folder.  
 
-- outputs/ → Contains saved metrics and visualizations for model comparison & analysis.  
+- outputs/ → Contains saved metrics, plots, and trained models.  
 
 - dashboard/app.py →  
   • Streamlit dashboard for interactive forecasting.  
@@ -79,11 +82,12 @@ venv\Scripts\activate      # Windows
 source venv/bin/activate   # Mac/Linux
 
 pip install -r requirements.txt
-jupyter notebook notebooks/sales_forecasting.ipynb
 
-cd dashboard
-streamlit run app.py
+# Train models
+python train_models.py
 
+# Launch Streamlit dashboard
+streamlit run dashboard/app.py
 ```
 ---
 

@@ -14,17 +14,29 @@ import plotly.express as px
 # ----------------------------
 st.set_page_config(page_title="Retail Sales Forecast Dashboard", layout="wide")
 
+from pathlib import Path
+
+# ----------------------------
+# Path Configuration
+# ----------------------------
+CURRENT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = CURRENT_DIR.parent if (CURRENT_DIR.parent / "data" / "sales.csv").exists() else CURRENT_DIR
+
+DATA_PATH = PROJECT_ROOT / "data" / "sales.csv"
+XGB_PATH = PROJECT_ROOT / "outputs" / "models" / "xgb_model.pkl"
+LSTM_PATH = PROJECT_ROOT / "outputs" / "models" / "lstm_model.h5"
+
 # ----------------------------
 # Load dataset
 # ----------------------------
-df = pd.read_csv("../data/sales.csv")
+df = pd.read_csv(DATA_PATH)
 df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
 
 # ----------------------------
 # Load trained models
 # ----------------------------
-xgb_model = joblib.load("../outputs/models/xgb_model.pkl")
-lstm_model = load_model("../outputs/models/lstm_model.h5", compile=False)
+xgb_model = joblib.load(XGB_PATH)
+lstm_model = load_model(LSTM_PATH, compile=False)
 
 # ----------------------------
 # Sidebar
